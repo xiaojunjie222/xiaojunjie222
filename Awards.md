@@ -5,28 +5,25 @@
         <hr className="border-t-2 border-blue-500 my-1" />
         <div>
           <h4 className="font-bold text-blue-800">
-            自变量机器人 | 工厂离线推理 License · mTLS 代理
+            自变量机器人 | Harrix 具身推理服务
           </h4>
           <h4 className="font-bold">
-            推理链路透明代理（不改业务客户端 / 不解析应用协议）
+            通用 Serving · PI0.5 JAX/Torch · Token 计费
           </h4>
           <ul className="ml-4">
             <li className="list-[circle] list-item ">
-              机器人到推理机走 TLS 1.3 双向证书；代理只做 WebSocket 透明转发，业务进程不用改。
+              WebSocket 策略推理服务：动态 batch、Handler 编解码、Executor 上 GPU；模型族与 JAX/Torch 引擎边界拆开。
             </li>
             <li className="list-[circle] list-item">
-              License Daemon 校验签名、机器绑定、离线时间、递增序号、机器人身份和并发连接；过期拒绝新连接并排空关闭。
+              PI0.5 / RLT 路径：请求适配与 executor 解耦，统一 robot state/action；修视觉投影与本体感觉对齐。
             </li>
           </ul>
           <h4 className="font-bold">
-            离线交付与状态页
+            Token 用量计量
           </h4>
           <ul className="ml-4">
             <li className="list-[circle] list-item ">
-              普通 U 盘导入 License，校验失败保留当前有效授权；本机状态页展示 ACTIVE / EXPIRED 并可试连。
-            </li>
-            <li className="list-[circle] list-item">
-              端到端覆盖真实 TLS、大消息流式转发、过期拒绝；linux/amd64、arm64 构建与 systemd 现场部署。
+              按请求记录 input/output/total tokens，HTTP 批量上报计费；ingest 故障不阻塞推理。
             </li>
           </ul>
           <h4 className="font-bold text-blue-800">
@@ -122,7 +119,7 @@
           </ul>
           <span>
             <strong>
-              做 Agent 不只写对话，把工具调用、评测、微调蒸馏，和工厂离线推理的 License / mTLS 代理串成能上线的链路。
+              做 Agent 不只写对话，把工具调用、评测、微调蒸馏，和具身策略推理 serving 串成能上线的链路。
             </strong>
             <strong>详细经历：</strong>
             <a

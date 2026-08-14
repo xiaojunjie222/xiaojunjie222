@@ -5,7 +5,7 @@
     <strong>I'm currently Focus on Agent Tool-Use, Eval, SFT/Distill and Inference.</strong>
   </p>
   <p>
-    <code>华为 → 科大讯飞（Agent）→ 自变量机器人（离线推理 License / mTLS）</code>
+    <code>华为 → 科大讯飞（Agent）→ 自变量机器人（Harrix Serving）</code>
   </p>
 </div>
 
@@ -18,7 +18,7 @@
 > 📄 [View Experience →](https://github.com/xiaojunjie222/xiaojunjie222/blob/main/Awards.md)
 
 <p>
-<strong>自变量机器人</strong> -- <code>Offline Inference · License · mTLS Proxy</code><br/>
+<strong>自变量机器人</strong> -- <code>Harrix Serving · PI0.5 · Token Billing</code><br/>
 <strong>科大讯飞</strong> -- <code>Agent Tool-Use · Dialogue · Eval · SFT/Distill</code><br/>
 <strong>华为</strong> -- <code>MetaERP · 供应链 · 应付发票 · 断供替换</code><br/>
 </p>
@@ -47,7 +47,7 @@
 
 #### 📌 Experience Details
 
-- [自变量机器人 | 工厂离线推理 License / mTLS 代理](./x2robot.md)
+- [自变量机器人 | Harrix 具身推理服务](./x2robot.md)
 - [科大讯飞 | Agent 工具调用 · 对话 · 评测 · 微调蒸馏](./iflytek.md)
 - [华为 | S 级 MetaERP 替换 · 供应链 / 应付发票](./huawei.md)
 

@@ -1,62 +1,57 @@
 <section className="mb-2">
         <h2 className="text-2xl font-semibold text-blue-700">
-          自变量机器人 | AI 推理服务
+          自变量机器人 | Harrix 具身推理服务
         </h2>
         <hr className="border-t-2 border-blue-500 my-1" />
         <div>
           <h4 className="font-bold text-blue-800">
-            工厂离线推理 License · mTLS 代理 · 到期管控
+            Policy Serving · PI0.5 · Token Billing
           </h4>
           <ul className="ml-4">
             <li className="list-[circle] list-item">
-              【业务背景】：机器人进客户工厂后经常离线。推理服务要能在现场跑，同时管住授权：谁能连、连几台、过期停服，还不能改业务客户端和推理进程本身。
+              【业务背景】：Harrix 是机器人策略推理引擎。多客户端走 WebSocket 打到 GPU，要动态 batch、多模型族、JAX/Torch 双引擎，还要把 token 用量计进计费，且上报不能拖慢推理。
             </li>
             <li className="list-[circle] list-item">
-              【职责&成果】：从 0 落地离线推理授权与安全通信：机器人到推理机的 mTLS 透明代理、License Daemon 校验、普通 U 盘离线导入、本机状态页，以及 TLS / 过期 / 大消息流式转发的端到端测试。
+              【职责&成果】：参与 Harrix serving：通用 serving 边界、PI0.5 流水线、RLT 路径，以及按请求计量 token 并异步上报计费。
             </li>
           </ul>
           <h4 className="font-bold">
-            推理链路透明代理
+            通用 Serving 框架
           </h4>
           <ul className="ml-4">
             <li className="list-[circle] list-item">
-              机器人连本机 Client Proxy，推理机 Server Proxy 用 TLS 1.3 双向证书建连，再转到本机推理服务。
+              WebSocket Policy Server：请求排队、动态 batch、ServingHandler 编解码、ModelExecutor 上 GPU。
             </li>
             <li className="list-[circle] list-item">
-              代理只做 WebSocket 透明转发：不改业务协议、不解析应用消息、不额外加应用层认证，业务客户端和推理服务都不用改。
+              把模型族和引擎边界拆开：PI0.5 family 与 JAX / Torch runtime 分离，请求适配和 executor 流水线解耦。
+            </li>
+            <li className="list-[circle] list-item">
+              统一 robot state / action 语义，收敛 RLT serving 与单实例部署路径。
             </li>
           </ul>
           <h4 className="font-bold">
-            License 授权与到期关闭
+            PI0.5 推理与多引擎
           </h4>
           <ul className="ml-4">
             <li className="list-[circle] list-item">
-              Daemon 校验签名、机器绑定、离线可信时间、严格递增序号、机器人证书身份和并发连接数。
+              PI0.5 Torch / JAX serving：epilogue proprio、dataset v2、batched forward、RLT actor 路径。
             </li>
             <li className="list-[circle] list-item">
-              License 失效后拒绝新连接、停止转发新的上行，已发出请求排空后关闭，避免过期后继续白嫖推理。
+              修推理正确性：视觉投影 bias、本体感觉输出、张量设备对齐，避免 serving 和训练合同步。
             </li>
           </ul>
           <h4 className="font-bold">
-            离线交付与本机状态
+            Token 用量计量与计费上报
           </h4>
           <ul className="ml-4">
             <li className="list-[circle] list-item">
-              现场用普通 U 盘导入 License：只读扫描、校验失败保留当前有效授权，通过后原子更新。
+              每次推理响应带 input / output / total tokens；多副本只在 router 记一次，避免重复计费。
             </li>
             <li className="list-[circle] list-item">
-              本机状态页只读展示授权是否有效，并可试连代理；ACTIVE 可通，EXPIRED 拒绝新连接。
-            </li>
-          </ul>
-          <h4 className="font-bold">
-            测试与交付
-          </h4>
-          <ul className="ml-4">
-            <li className="list-[circle] list-item">
-              Go 端到端覆盖真实 TLS 1.3、双向证书、metadata 首帧、帧边界、大消息流式转发、异常关闭和过期拒绝。
+              HTTP 批量上报计费 ingest（内存队列、NDJSON batch、at-least-once 重试）；ingest 挂了也不堵推理，record 走非阻塞入队。
             </li>
             <li className="list-[circle] list-item">
-              兼容真实 RobotClient 走代理；linux/amd64、linux/arm64 构建，配套 systemd / udev 现场部署。
+              握手头 X-Biz-*、拨号地址写入用量记录；计量默认关闭，配置打开。
             </li>
           </ul>
         </div>
