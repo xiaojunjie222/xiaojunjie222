@@ -55,11 +55,17 @@
             </li>
           </ul>
           <h4 className="font-bold text-blue-800">
-            华为 | 项目经历
+            华为 | S 级项目 MetaERP 替换
+          </h4>
+          <h4 className="font-bold">
+            供应链系统 · 财务应付发票 · 美国断供替换
           </h4>
           <ul className="ml-4">
             <li className="list-[circle] list-item ">
-              参与华为相关工程研发与项目落地。
+              参与华为 S 级项目 MetaERP 替换，面向断供场景替换供应链与财务侧系统。
+            </li>
+            <li className="list-[circle] list-item">
+              财务应付发票：发票匹配、发票验证；采购旅行控制系统接入替换后的供应链与财务链路。
             </li>
           </ul>
           <h4 className="font-bold text-blue-800">

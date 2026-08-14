@@ -20,7 +20,7 @@
 <p>
 <strong>自变量机器人</strong> -- <code>AI Inference · Embodied Serving</code><br/>
 <strong>科大讯飞</strong> -- <code>Agent Tool-Use · Dialogue · Eval · SFT/Distill</code><br/>
-<strong>华为</strong> -- <code>Project Engineering</code><br/>
+<strong>华为</strong> -- <code>MetaERP · 供应链 · 应付发票 · 断供替换</code><br/>
 </p>
 
 > 🏆 [View Awards →](https://github.com/xiaojunjie222/xiaojunjie222/blob/main/Awards.md)
@@ -49,7 +49,7 @@
 
 - [自变量机器人 | AI 推理服务](./x2robot.md)
 - [科大讯飞 | Agent 工具调用 · 对话 · 评测 · 微调蒸馏](./iflytek.md)
-- [华为 | 项目经历](./huawei.md)
+- [华为 | S 级 MetaERP 替换 · 供应链 / 应付发票](./huawei.md)
 
 <div align="center">
   <img src="https://skillicons.dev/icons?i=python,go,java,linux,docker,pytorch,fastapi,spring" alt="skills"/>
