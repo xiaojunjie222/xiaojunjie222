@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>肖俊杰 · Agent & AI Inference</title>
+  <style>
+    :root {
+      --bg: #f7f8fb;
+      --paper: #ffffff;
+      --ink: #1c2333;
+      --muted: #5b6578;
+      --line: #d8dee9;
+      --blue: #1d4ed8;
+      --blue-deep: #1e3a8a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.65;
+    }
+    .wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+    header {
+      padding-bottom: 28px;
+      border-bottom: 2px solid var(--blue);
+    }
+    .tag {
+      color: var(--blue);
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    h1 {
+      margin: 8px 0 10px;
+      font-size: 36px;
+      letter-spacing: -0.03em;
+    }
+    .lead {
+      margin: 0;
+      color: var(--muted);
+      font-size: 17px;
+    }
+    .links {
+      margin-top: 16px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    section { margin-top: 40px; }
+    h2 {
+      margin: 0 0 12px;
+      font-size: 22px;
+      color: var(--blue-deep);
+    }
+    .rule {
+      height: 2px;
+      background: #3b82f6;
+      border: 0;
+      margin: 0 0 20px;
+    }
+    .job h3 {
+      margin: 0 0 4px;
+      font-size: 17px;
+      color: var(--blue-deep);
+    }
+    .job + .job { margin-top: 22px; }
+    .meta {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    ul { margin: 0; padding-left: 18px; }
+    li { margin: 6px 0; }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      padding: 16px 18px;
+    }
+    .card h3 { margin: 0 0 6px; font-size: 16px; }
+    .card p { margin: 0; color: var(--muted); font-size: 14px; }
+    .photos img {
+      width: 100%;
+      display: block;
+      margin: 16px 0 0;
+      background: #111;
+    }
+    footer {
+      margin-top: 56px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+    }
+    @media (max-width: 640px) {
+      .grid { grid-template-columns: 1fr; }
+      h1 { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="tag">Personal Site</div>
+      <h1>肖俊杰</h1>
+      <p class="lead">I'm currently Focus on Agent（工具调用 / 评测 / 微调蒸馏）与 AI 推理服务。<br />华为 → 科大讯飞（Agent）→ 自变量机器人（推理服务）</p>
+      <div class="links">
+        <a href="https://github.com/xiaojunjie222">GitHub</a>
+        <a href="./Awards.md">竞赛与项目经历</a>
+      </div>
+    </header>
+
+    <section>
+      <h2>工作经历</h2>
+      <hr class="rule" />
+      <article class="job">
+        <h3>自变量机器人</h3>
+        <p class="meta">AI 推理服务</p>
+        <ul>
+          <li>面向具身智能场景，做模型推理服务相关工程。</li>
+          <li>覆盖服务链路、运行时能力与离线交付，关注稳定性与可运维性。</li>
+        </ul>
+      </article>
+      <article class="job">
+        <h3>科大讯飞</h3>
+        <p class="meta">Agent 工具调用 · 对话 · 评测 · 微调蒸馏</p>
+        <ul>
+          <li>负责 Agent 工具调用链路（Function Calling / Tool Use）：工具选择、参数填充、结果回填与失败重试。</li>
+          <li>搭建多轮对话能力，覆盖意图理解、上下文管理、工具编排与任务闭环。</li>
+          <li>建设 Agent 评测：工具调用准确率、参数合法性、对话任务完成率与回归集；用评测反推 Prompt / 工具描述 / 模型选择。</li>
+          <li>参与业务模型微调（SFT）与蒸馏，把大模型的工具调用和对话能力压到可上线小模型。</li>
+        </ul>
+      </article>
+      <article class="job">
+        <h3>华为</h3>
+        <p class="meta">项目经历</p>
+        <ul>
+          <li>参与华为相关工程研发与项目落地。</li>
+        </ul>
+      </article>
+    </section>
+
+    <section>
+      <h2>竞赛</h2>
+      <hr class="rule" />
+      <article class="job">
+        <h3>科大讯飞 CBG 首届黑客马拉松 · 优秀奖</h3>
+        <p class="meta">爱(AI)必胜队 · 搭了个搭 · CBG AI HACKATHON</p>
+        <ul>
+          <li>48 小时极限冲刺，作品「搭了个搭」：按体型、风格与预算给出个性化穿搭建议。</li>
+          <li>队员：周孟萃、王刚、肖俊杰、刘毛旦。</li>
+        </ul>
+        <div class="photos">
+          <img src="./assets/iflytek-trophy.png" alt="科大讯飞 CBG 黑客马拉松优秀奖奖杯" />
+          <img src="./assets/iflytek-hackathon.png" alt="CBG 黑客马拉松获奖公示" />
+        </div>
+      </article>
+    </section>
+
+    <section>
+      <h2>开源项目</h2>
+      <hr class="rule" />
+      <div class="grid">
+        <a class="card" href="https://github.com/xiaojunjie222/llm-from-scratch">
+          <h3>llm-from-scratch</h3>
+          <p>从零手写 Transformer，支持思维链推理。</p>
+        </a>
+        <a class="card" href="https://github.com/xiaojunjie222/llm-quantization-toolkit">
+          <h3>llm-quantization-toolkit</h3>
+          <p>面向 Qwen / DeepSeek / LLaMA 的量化工具包。</p>
+        </a>
+        <a class="card" href="https://github.com/xiaojunjie222/rbac-permission-system-java">
+          <h3>rbac-permission-system-java</h3>
+          <p>Spring Boot + MyBatis-Plus + JWT 权限系统。</p>
+        </a>
+        <a class="card" href="https://github.com/xiaojunjie222/time-dashboard">
+          <h3>time-dashboard</h3>
+          <p>时间管理 Web 应用。</p>
+        </a>
+      </div>
+    </section>
+
+    <footer>
+      GitHub <a href="https://github.com/xiaojunjie222">xiaojunjie222</a>
+      · less is more
+    </footer>
+  </div>
+</body>
+</html>
