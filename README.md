@@ -1,40 +1,59 @@
 <div align="center">
-
-# 肖俊杰
-
-**Agent · Tool Use · Inference**
-
-I'm currently Focus on **Agent（工具调用 / 评测 / 微调蒸馏）** 与 **AI 推理服务**。  
-路径：华为 → 科大讯飞（Agent）→ 自变量机器人（推理服务）
-
-[GitHub](https://github.com/xiaojunjie222) · [竞赛与项目经历](./Awards.md)
-
+  <img src="https://readme-typing-svg.herokuapp.com?font=Cascadia+Code&weight=700&size=17&color=0078D7&center=true&pause=1000&width=600&lines=Hi,+I'm+Xiao+Junjie.;Agent+%26+Inference+Engineer;Tool-Use+·+Eval+·+SFT+%2F+Distill" alt="Hi"/>
+  <p>
+    <img src="https://raw.githubusercontent.com/MartinHeinz/MartinHeinz/master/wave.gif" width="28px" height="28px"/>
+    <strong>I'm currently Focus on Agent Tool-Use, Eval, SFT/Distill and Inference.</strong>
+  </p>
+  <p>
+    <code>华为 → 科大讯飞（Agent）→ 自变量机器人（推理服务）</code>
+  </p>
 </div>
+
+<table>
+<tr>
+<td valign="top" width="50%">
+
+#### 💼 Work Experience
+
+> 📄 [View Experience →](https://github.com/xiaojunjie222/xiaojunjie222/blob/main/Awards.md)
+
+<p>
+<strong>自变量机器人</strong> -- <code>AI Inference · Embodied Serving</code><br/>
+<strong>科大讯飞</strong> -- <code>Agent Tool-Use · Dialogue · Eval · SFT/Distill</code><br/>
+<strong>华为</strong> -- <code>Project Engineering</code><br/>
+</p>
+
+> 🏆 [View Awards →](https://github.com/xiaojunjie222/xiaojunjie222/blob/main/Awards.md)
+
+- 🏅 **科大讯飞 CBG 首届黑客马拉松优秀奖** — [搭了个搭](https://github.com/xiaojunjie222/xiaojunjie222/blob/main/iflytek.md)
+
+</td>
+<td valign="top" width="48%">
+
+#### 💻 Open Source Experience
+
+> 📂 [View Projects →](https://github.com/xiaojunjie222/xiaojunjie222/blob/main/Awards.md)
+
+- 🧠 **[llm-from-scratch](https://github.com/xiaojunjie222/llm-from-scratch)** — 从零手写 Transformer，支持思维链推理
+- ⚙️ **[llm-quantization-toolkit](https://github.com/xiaojunjie222/llm-quantization-toolkit)** — Qwen / DeepSeek / LLaMA 量化
+- 🔐 **[rbac-permission-system-java](https://github.com/xiaojunjie222/rbac-permission-system-java)** — Spring Boot + JWT 权限系统
+- ⏱️ **[time-dashboard](https://github.com/xiaojunjie222/time-dashboard)** — 时间管理 Web 应用
+
+</td>
+</tr>
+</table>
 
 ---
 
-#### 工作经历
+#### 📌 Experience Details
 
-- **自变量机器人** — AI 推理服务  
-  面向具身智能场景，做模型推理服务相关工程：服务链路、运行时与离线交付能力。
-- **科大讯飞** — Agent 工具调用 · 对话 · 评测 · 微调蒸馏  
-  负责 Agent 工具调用与多轮对话，建设评测集；参与业务模型微调与蒸馏。CBG 黑客马拉松「搭了个搭」优秀奖。
-- **华为** — 项目经历  
-  参与华为相关工程研发与项目落地。
-
-> 完整经历、奖项与证书：[Awards.md](./Awards.md)
-
-#### 开源与个人项目
-
-- [llm-from-scratch](https://github.com/xiaojunjie222/llm-from-scratch) — 从零手写 Transformer，支持思维链推理
-- [llm-quantization-toolkit](https://github.com/xiaojunjie222/llm-quantization-toolkit) — 大模型量化工具包（Qwen / DeepSeek / LLaMA）
-- [rbac-permission-system-java](https://github.com/xiaojunjie222/rbac-permission-system-java) — Spring Boot + MyBatis-Plus + JWT 权限系统
-- [time-dashboard](https://github.com/xiaojunjie222/time-dashboard) — 时间管理 Web 应用
-
-#### 技术栈
-
-`Python` `Go` `Java` `Agent` `Function Calling` `Eval` `SFT` `Distillation` `Inference` `Transformer`
+- [自变量机器人 | AI 推理服务](./x2robot.md)
+- [科大讯飞 | Agent 工具调用 · 对话 · 评测 · 微调蒸馏](./iflytek.md)
+- [华为 | 项目经历](./huawei.md)
 
 <div align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=xiaojunjie222&show_icons=true&theme=transparent&hide_border=true" alt="GitHub stats" />
+  <img src="https://skillicons.dev/icons?i=python,go,java,linux,docker,pytorch,fastapi,spring" alt="skills"/>
+  <br/>
+  <img src="https://github-readme-stats.vercel.app/api?username=xiaojunjie222&show_icons=true&theme=transparent&hide_border=true" alt="GitHub stats"/>
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=xiaojunjie222&layout=compact&theme=transparent&hide_border=true" alt="Top langs"/>
 </div>
