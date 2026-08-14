@@ -117,7 +117,7 @@
     <header>
       <div class="tag">Personal Site</div>
       <h1>肖俊杰</h1>
-      <p class="lead">I'm currently Focus on Agent（工具调用 / 评测 / 微调蒸馏）与 AI 推理服务。<br />华为 → 科大讯飞（Agent）→ 自变量机器人（推理服务）</p>
+      <p class="lead">I'm currently Focus on Agent（工具调用 / 评测 / 微调蒸馏）与工厂离线推理。<br />华为 → 科大讯飞（Agent）→ 自变量机器人（License / mTLS 代理）</p>
       <div class="links">
         <a href="https://github.com/xiaojunjie222">GitHub</a>
         <a href="./Awards.md">竞赛与项目经历</a>
@@ -131,11 +131,13 @@
       <hr class="rule" />
       <article class="job">
         <h3>自变量机器人</h3>
-        <p class="meta">AI Inference · Embodied Serving · <a href="./x2robot.md">详细经历</a></p>
+        <p class="meta">Offline Inference · License · mTLS Proxy · <a href="./x2robot.md">详细经历</a></p>
         <ul>
-          <li>【业务背景】具身智能需要稳定的模型推理服务，端侧与推理机协同，覆盖在线链路和离线交付。</li>
-          <li>面向具身场景梳理推理请求链路：端侧发起、推理机承接、结果回传。</li>
-          <li>覆盖运行时与离线交付，关注稳定性、状态可见和问题可定位。</li>
+          <li>【业务背景】工厂离线部署机器人推理：要能在现场跑，同时管住授权，且不改业务客户端和推理进程。</li>
+          <li>透明代理：机器人 ↔ 推理机 TLS 1.3 双向证书，WebSocket 原样转发，不解析应用协议。</li>
+          <li>License：签名、机器绑定、离线时间、递增序号、机器人身份、并发连接；过期拒绝新连接并排空关闭。</li>
+          <li>离线交付：普通 U 盘导入；本机状态页看 ACTIVE / EXPIRED，并可试连代理。</li>
+          <li>测试与交付：真实 TLS、大消息流式转发、过期拒绝；linux/amd64、arm64 与 systemd 现场部署。</li>
         </ul>
       </article>
       <article class="job">

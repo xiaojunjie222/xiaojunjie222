@@ -5,17 +5,28 @@
         <hr className="border-t-2 border-blue-500 my-1" />
         <div>
           <h4 className="font-bold text-blue-800">
-            自变量机器人 | AI 推理服务
+            自变量机器人 | 工厂离线推理 License · mTLS 代理
           </h4>
           <h4 className="font-bold">
-            Embodied Inference Serving（https://x2robot.com/）
+            推理链路透明代理（不改业务客户端 / 不解析应用协议）
           </h4>
           <ul className="ml-4">
             <li className="list-[circle] list-item ">
-              面向具身智能场景建设推理服务：服务链路、运行时与离线交付。
+              机器人到推理机走 TLS 1.3 双向证书；代理只做 WebSocket 透明转发，业务进程不用改。
             </li>
             <li className="list-[circle] list-item">
-              关注稳定性与可运维性，以及端侧与推理机之间的协同。
+              License Daemon 校验签名、机器绑定、离线时间、递增序号、机器人身份和并发连接；过期拒绝新连接并排空关闭。
+            </li>
+          </ul>
+          <h4 className="font-bold">
+            离线交付与状态页
+          </h4>
+          <ul className="ml-4">
+            <li className="list-[circle] list-item ">
+              普通 U 盘导入 License，校验失败保留当前有效授权；本机状态页展示 ACTIVE / EXPIRED 并可试连。
+            </li>
+            <li className="list-[circle] list-item">
+              端到端覆盖真实 TLS、大消息流式转发、过期拒绝；linux/amd64、arm64 构建与 systemd 现场部署。
             </li>
           </ul>
           <h4 className="font-bold text-blue-800">
@@ -111,7 +122,7 @@
           </ul>
           <span>
             <strong>
-              做 Agent 不只写对话，把工具调用、评测、微调蒸馏和推理服务串成一条能上线的链路。活跃在科大讯飞 Agent 与自变量具身推理方向。
+              做 Agent 不只写对话，把工具调用、评测、微调蒸馏，和工厂离线推理的 License / mTLS 代理串成能上线的链路。
             </strong>
             <strong>详细经历：</strong>
             <a
