@@ -41,17 +41,23 @@
             </li>
           </ul>
           <h4 className="font-bold">
-            Token 用量计量与计费上报
+            近期改动（只写能力变化，不含内部实现）
           </h4>
           <ul className="ml-4">
             <li className="list-[circle] list-item">
-              每次推理响应带 input / output / total tokens；多副本只在 router 记一次，避免重复计费。
+              通用 serving 边界：PI0.5 流水线独立出来，请求适配和 executor 解耦，旧 launcher 收敛掉。
             </li>
             <li className="list-[circle] list-item">
-              HTTP 批量上报计费 ingest（内存队列、NDJSON batch、at-least-once 重试）；ingest 挂了也不堵推理，record 走非阻塞入队。
+              模型族和引擎拆开：PI0.5 family 与 JAX / Torch runtime 分界，RLT 走各自 runner。
             </li>
             <li className="list-[circle] list-item">
-              握手头 X-Biz-*、拨号地址写入用量记录；计量默认关闭，配置打开。
+              推理正确性：视觉投影补 bias，epilogue 本体感觉对齐训练侧，batched forward 设备一致。
+            </li>
+            <li className="list-[circle] list-item">
+              Token 计量：每次响应带 input/output/total tokens，多副本只记一次。
+            </li>
+            <li className="list-[circle] list-item">
+              计费上报：HTTP 批量送 ingest，队列非阻塞；ingest 挂了不拖推理延迟。计量默认关，配置打开。
             </li>
           </ul>
         </div>

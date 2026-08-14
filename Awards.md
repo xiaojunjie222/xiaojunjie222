@@ -23,7 +23,7 @@
           </h4>
           <ul className="ml-4">
             <li className="list-[circle] list-item ">
-              按请求记录 input/output/total tokens，HTTP 批量上报计费；ingest 故障不阻塞推理。
+              按请求记录 input/output/total tokens，HTTP 批量上报计费；ingest 故障不阻塞推理。计量可开关。
             </li>
           </ul>
           <h4 className="font-bold text-blue-800">
