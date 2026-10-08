@@ -45,10 +45,14 @@
 
 ---
 
+#### 📝 推理优化笔记
+
+- **[Harrix 机器人推理优化详解](./notes/robot-inference-optimization.md)**
+  从客户端到动作执行，梳理 prefill、KV cache、denoise、算子融合与 CUDA Graph，附 5 张流程图、张量变化表及性能定位方法。
+
 #### 📌 Experience Details
 
 - [自变量机器人 | Harrix 具身推理服务](./x2robot.md)
-  - [从 Harrix 看机器人动作推理优化](./notes/robot-inference-optimization.md)
 - [科大讯飞 | Agent 工具调用 · 对话 · 评测 · 微调蒸馏](./iflytek.md)
 - [华为 | S 级 MetaERP 替换 · 供应链 / 应付发票](./huawei.md)
 

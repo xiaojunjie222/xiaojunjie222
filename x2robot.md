@@ -66,8 +66,8 @@
 
 ## 机器人动作推理优化笔记
 
-[从 Harrix 看机器人动作推理优化](./notes/robot-inference-optimization.md)
+[Harrix 机器人推理优化详解](./notes/robot-inference-optimization.md)
 
 结合 Harrix 的动作推理路径，梳理客户端与服务调度、专家专用化、视觉结构复用、prefix KV、去噪循环、CUDA Graph、权重峰值、算子融合和 FlashAttention，并说明 RTC 计划衔接与跨请求历史的区别。
 
-文章按“省掉什么开销、依赖什么条件、怎样验证收益”组织，附全链路图、张量形状和性能定位方法。
+文章沿实际推理链路展开，附 5 张流程图、动作块与去噪轮次对照表、源码阅读入口和性能定位方法。
