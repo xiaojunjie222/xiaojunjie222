@@ -48,6 +48,7 @@
 #### 📌 Experience Details
 
 - [自变量机器人 | Harrix 具身推理服务](./x2robot.md)
+  - [从 Harrix 看机器人动作推理优化](./notes/robot-inference-optimization.md)
 - [科大讯飞 | Agent 工具调用 · 对话 · 评测 · 微调蒸馏](./iflytek.md)
 - [华为 | S 级 MetaERP 替换 · 供应链 / 应付发票](./huawei.md)
 
