@@ -1,26 +1,26 @@
 # VGA 推理加速
 
-这份说明只覆盖当前仓库 VGA native 引擎里能对上源码的加速。每一节先写代码实际做了什么，再写业界里同一类做法的出处。
+这份说明只写 VGA native 引擎里已经落地的加速，以及对应的源码在做什么。
 
-范围是 `python/harrix/model_executors/vga/engines/native/`。服务入口仍是 `handlers/vga.py` 的 `create_policy`，引擎名在这份代码里是 `native`。固定 33 帧配置走 `video_rcm_trigflow_action_ode`：学生视频 4 步，动作读教师视频的固定锚点，服务侧不把视频还原成像素。
+范围是 `python/harrix/model_executors/vga/engines/native/`。服务入口是 `handlers/vga.py` 的 `create_policy`，引擎名是 `native`。固定 33 帧配置走 `video_rcm_trigflow_action_ode`：学生视频 4 步，动作读教师视频的固定锚点，服务侧不把视频还原成像素。
 
-下面这些名字在讨论里出现过，但这条路径里没有单独的实现，本文不把它们写成已落地：小分辨率 VAE 专用快路径、删掉注意力重排、端侧专用算子、单独的“清理重复搬运”过程。`tiled_encode_batch` 仍把每块结果拷回 CPU；`attention.py` 和 `ops.py` 里的 `rearrange` 还在。
+下面这些名字在讨论里出现过，但这条路径里没有单独的实现：小分辨率 VAE 专用快路径、删掉注意力重排、端侧专用算子、单独的“清理重复搬运”过程。`tiled_encode_batch` 仍把每块结果拷回 CPU；`attention.py` 和 `ops.py` 里的 `rearrange` 还在。
 
 ## 总览
 
-| 代码里的做法 | 主要位置 | 业界对应 |
-|---|---|---|
-| CUDA Graph，录下固定形状的 GPU 操作再重放 | `core/cuda_graph.py`，`sampling/cuda_graph.py`，T5 与 VAE encode | NVIDIA CUDA Graphs |
-| 时间条件缓存 | `core/cache.py` 的 `TimeConditionCache` | 固定时间嵌入的记忆化；和 DeepCache、TeaCache 不是同一类 |
-| 文字编码和首帧 VAE 两条 CUDA Stream | `sampling/video_inputs.py` | CUDA Streams |
-| 多路相机先叠成一批，再做一次 CPU 到 GPU 拷贝 | `video_inputs.py` 的 `_tensor_frames` | CUDA Best Practices：合并小传输 |
-| 视频层特征留在 GPU | `ExactCache`，`VideoStream.step` 的 `keep_on_device` | 中间结果不回传 CPU；vLLM 的 KV cache 是同一类问题 |
-| ODE 路径在动作不再需要视频时提前停 | `streams.py` 的 `early_stop_for_action` | 少跑用不到的采样步 |
-| 服务不算回视频像素 | `executor.py` 的 `decode_video=False` | 潜空间里把特征交给下游，不经像素 |
-| `rmsnorm`、`rope` 优先走 xcompute | `core/ops.py` | 算子换成手写核，保留 PyTorch 回退 |
-| 注意力按已安装的库选择实现 | `ops.py` 的 `flash_attention` | FlashAttention-2/3，SageAttention，PyTorch SDPA |
+| 代码里的做法 | 主要位置 |
+|---|---|
+| CUDA Graph，录下固定形状的 GPU 操作再重放 | `core/cuda_graph.py`，`sampling/cuda_graph.py`，T5 与 VAE encode |
+| 时间条件缓存 | `core/cache.py` 的 `TimeConditionCache` |
+| 文字编码和首帧 VAE 两条 CUDA Stream | `sampling/video_inputs.py` |
+| 多路相机先叠成一批，再做一次 CPU 到 GPU 拷贝 | `video_inputs.py` 的 `_tensor_frames` |
+| 视频层特征留在 GPU | `ExactCache`，`VideoStream.step` 的 `keep_on_device` |
+| ODE 路径在动作不再需要视频时提前停 | `streams.py` 的 `early_stop_for_action` |
+| 服务不算回视频像素 | `executor.py` 的 `decode_video=False` |
+| `rmsnorm`、`rope` 优先走 xcompute | `core/ops.py` |
+| 注意力按已安装的库选择实现 | `ops.py` 的 `flash_attention` |
 
-学生视频和教师视频是两套权重。推理代码负责加载和按 deployment 使用它们，蒸馏的训练过程不在这个目录里。
+学生视频和教师视频是两套权重。推理代码负责加载，并按 deployment 使用它们。
 
 ## CUDA Graph
 
@@ -35,8 +35,6 @@
 
 `NativeEngine.reset` 会清掉这三处图，以及时间条件缓存。
 
-业界出处是 NVIDIA 从 CUDA 10 开始提供的 CUDA Graphs，以及 PyTorch 的 `torch.cuda.CUDAGraph`。TensorRT 和 vLLM 的 decode 也用同一机制：形状固定时，省掉每次把算子逐个提交给 GPU 的开销。
-
 ## 时间条件缓存
 
 `DenoiseLoop` 构造时总是创建 `TimeConditionCache`，上限 192MB。`_time_cache()` 只在 `deployment.profile_type` 以 `video_rcm_trigflow_action_` 开头时把这个对象交出去。`deployment.py` 里符合的是三份配置：`video_rcm_trigflow_action_ode`、`video_rcm_trigflow_action_restart`、`video_rcm_trigflow_action_consistency`。`teacher_ode` 对不上，调用方拿到 `None`，时间向量每次现算。
@@ -49,7 +47,7 @@ RCM 学生网络传入的标记是 `("rcm", time, timestep_scale)`。同一次�
 
 `get_or_create` 用 `(namespace, id(model), key)` 查 `OrderedDict`。命中则把条目挪到队尾并返回张量，`factory` 不执行。模型的 `time_embedding` 和 `time_projection` 权重地址或形状变了，该模型名下的旧条目全部丢掉。单条结果超过 192MB 只返回、不保存。
 
-这是对固定时间嵌入的记忆化。DiT 和 Diffusers 也会预计算时间向量。DeepCache、TeaCache 缓存的是相邻时间步的网络中间层，不是这里的时间调制向量。
+缓存的是时间调制向量。它不保存画面，也不保存动作。
 
 ## 文字编码和首帧压缩并行
 
@@ -62,13 +60,11 @@ CUDA 上，`DenoiseLoop` 建两条 stream，放在 `conditioning_streams`。`_pr
 
 没有 CUDA，或者没有输入图时，这两步在当前 stream 上按顺序做。
 
-出处是 CUDA Programming Guide 的 Streams：没有数据依赖的两段 GPU 工作可以重叠。Stable Diffusion 的 TensorRT 示例也把文字编码和图像编码拆开。
-
 ## 多路相机合并后再拷到 GPU
 
 `_tensor_frames`：每一帧都在 CPU 上时，先 `torch.stack`，再对这一整批做一次 `.to(device=pipe.device)`。已经在 GPU 上的帧则逐帧拷贝。PIL 路径在 `_pil_frames` 里同样是先堆成一个张量，再一次 `.to`。
 
-三视角时，这一次拷贝带走的是叠好的一批，而不是每路相机各提交一次小传输。CUDA C++ Best Practices Guide 把“合并小的 host 到 device 拷贝”写成传输方面的基本做法。
+三视角时，这一次拷贝带走的是叠好的一批，而不是每路相机各提交一次小传输。
 
 ## 视频特征留在 GPU，并直接交给动作
 
@@ -78,15 +74,11 @@ ODE 的 `VideoStream.step` 默认把每一层视频特征 `.to("cpu")`。`keep_o
 
 动作网络要的是这些层特征，不是像素。`model_fn` 在 `return_video_features=True` 时收集每一层输出。服务路径另外保证不跑 VAE decode：`VGAExecutor.infer_batch` 固定 `decode_video=False`。
 
-中间结果留在计算设备上，是推理系统里的常规做法。vLLM / PagedAttention 解决的是同一类往返：不要把下一步还要用的张量先搬回 CPU。潜空间里把特征交给下游，对应 Latent Diffusion 的工作方式；动作层直接读视频隐藏层，结构上接近 ControlNet、IP-Adapter 读上游特征，而不是先解码再编码。
-
 ## ODE 路径提前停下视频
 
 `VideoStream.num_steps` 在 `early_stop_for_action` 为真、并且存在 `action_mapping` 时，返回映射里最大的视频步再加 1。`DenoiseLoop.run` 把 `early_stop_for_action` 设成 `skip_video_decode`。服务请求因此不会把视频采样跑到 scheduler 的最后一步，只要动作映射已经覆盖到的那一步。
 
 这条逻辑在 `video_mode == "ode"` 的 `VideoStream` 上。固定 33 帧的 `rcm_trigflow` 走 `_run_rcm`，学生网络仍按时间表跑完 4 步，教师网络跑到 deployment 写明的锚点。RCM 路径不使用 `early_stop_for_action`。
-
-少算后面用不到的扩散步，和 DDIM 用更少步数到达可用结果是同一方向。这里停的是视频采样的尾部，不是网络某一层提前退出。
 
 ## 算子选择
 
@@ -101,27 +93,10 @@ rope = _FallbackOp("rope", _rope_pytorch)
 
 `flash_attention` 的选择顺序是：有 mask 时用 PyTorch SDPA；否则依次尝试 FlashAttention-3、FlashAttention-2、SageAttention；都没有则再使用 SDPA。每次调用前后仍有 `rearrange`，用来匹配所选库的头维布局。当前代码没有把这些重排删掉。
 
-算子迁移的公开工具是 TensorRT、TVM、Triton、CUTLASS。注意力核的论文是 FlashAttention、FlashAttention-2、FlashAttention-3。这个目录不包含 `.cu`；xcompute 不在进程里时，行为退回上面的 PyTorch 函数。
+这个目录不包含 `.cu`。xcompute 不在进程里时，`rmsnorm` 和 `rope` 退回上面的 PyTorch 函数。
 
 ## 学生权重和教师权重
 
 `model_stack.py` 在 profile 以 `video_rcm_trigflow_action_` 开头时，除了 `self.dit` 再构建一套 `WanModel` 作为 `_video_teacher`。`load_deployment_state_dict` 分别从 `checkpoints["video_student"]` 和 `checkpoints["video_teacher"]` 加载。`teacher_ode` 只有一套视频权重。
 
-这是推理期对两份 checkpoint 的使用方式。把教师训成少步学生的过程不在 Harrix 的这个目录里。对应的训练文献是 Hinton 等人的知识蒸馏，以及扩散少步采样里的 Progressive Distillation、Consistency Models、Latent Consistency Models、DMD。`rcm.py` 里由正弦、余弦组成的 `c_skip`、`c_out`、`c_in` 与 EDM、consistency 模型的预条件是同一族写法。
-
-## 参考
-
-- NVIDIA, *CUDA Graphs*, CUDA 10 起；PyTorch `torch.cuda.CUDAGraph`。
-- NVIDIA, *CUDA C++ Best Practices Guide*，host 与 device 之间的传输；*CUDA Programming Guide*，Streams。
-- Hinton, Vinyals, Dean. *Distilling the Knowledge in a Neural Network*. 2015.
-- Salimans, Ho. *Progressive Distillation for Fast Sampling of Diffusion Models*. 2022.
-- Song, Dhariwal, Chen, Sutskever. *Consistency Models*. 2023.
-- Luo, Tan, Huang, Li, Zhao. *Latent Consistency Models*. 2023.
-- Yin 等. *One-step Diffusion with Distribution Matching Distillation*. 2024.
-- Karras, Aittala, Aila, Laine. *Elucidating the Design Space of Diffusion-Based Generative Models*. 2022.
-- Peebles, Xie. *Scalable Diffusion Models with Transformers*. 2023.
-- Dao 等. *FlashAttention*. 2022；*FlashAttention-2*. 2023；*FlashAttention-3*. 2024.
-- Kwon 等. *Efficient Memory Management for Large Language Model Serving with PagedAttention*. 2023.
-- Rombach 等. *High-Resolution Image Synthesis with Latent Diffusion Models*. 2022.
-- Song, Meng, Ermon. *Denoising Diffusion Implicit Models*. 2020.
-- Ma, Zhang, Xiong, Qi. *DeepCache*. 2023. 缓存的是网络块在相邻时间步的输出，不是本文的时间条件缓存。
+`rcm.py` 的去噪一步用三个由正弦、余弦算出的系数：`c_skip`、`c_out`、`c_in`。网络看 `c_in * x`，输出和当前 `x` 合成更干净的 `x0`，然后把第 0 帧再钉回真实画面。

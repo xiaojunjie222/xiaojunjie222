@@ -51,7 +51,7 @@
   从客户端到动作执行，梳理 prefill、KV cache、denoise、算子融合与 CUDA Graph，附 5 张流程图、张量变化表及性能定位方法。
 
 - **[VGA 推理加速](./notes/vga-inference-acceleration.md)**
-  VGA native 引擎里已经落地的加速：CUDA Graph、时间条件缓存、T5 与 VAE 双 Stream、多相机合并拷贝、特征留在 GPU，以及各自的业界出处。
+  VGA native 引擎里已经落地的加速：CUDA Graph、时间条件缓存、T5 与 VAE 双 Stream、多相机合并拷贝、特征留在 GPU。
 
 #### 📌 Experience Details
 
