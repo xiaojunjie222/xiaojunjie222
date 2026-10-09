@@ -55,6 +55,11 @@
 - **[VGA 推理加速](./notes/vga-inference-acceleration.md)**
   对照 VGA native 引擎的源码，说明每一处已经落地的加速省掉的是哪一段时间：提交 GPU 的开销、重复的时间向量、文字编码与首帧压缩串行、多路相机分次拷贝，以及把视频画成像素。
 
+#### 🔜 计划落地
+
+- **双臂机器人操作**
+  后续要把推理接到双臂机器人上，先做 pick and place 和叠衣服，再扩到同类桌面操作。这一项还没落地。
+
 #### 📌 Experience Details
 
 - [自变量机器人 | Harrix 具身推理服务](./x2robot.md)
