@@ -25,7 +25,9 @@
 
 > 🏆 [View Awards →](https://github.com/xiaojunjie222/xiaojunjie222/blob/main/Awards.md)
 
+- 🏅 **华为 · 英雄强渡大渡河奖** — [MetaERP 替换](https://github.com/xiaojunjie222/xiaojunjie222/blob/main/huawei.md)
 - 🏅 **科大讯飞 CBG 首届黑客马拉松优秀奖** — [搭了个搭](https://github.com/xiaojunjie222/xiaojunjie222/blob/main/iflytek.md)
+- 🏅 **自变量机器人 · 极致交付奖** — [Harrix Serving](https://github.com/xiaojunjie222/xiaojunjie222/blob/main/x2robot.md)
 
 </td>
 <td valign="top" width="48%">

@@ -5,7 +5,7 @@
         <hr className="border-t-2 border-blue-500 my-1" />
         <div>
           <h4 className="font-bold text-blue-800">
-            Policy Serving · PI0.5 · Token Billing
+            极致交付奖 · Policy Serving · PI0.5 · Token Billing
           </h4>
           <ul className="ml-4">
             <li className="list-[circle] list-item">

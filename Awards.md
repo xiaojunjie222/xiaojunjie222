@@ -5,7 +5,7 @@
         <hr className="border-t-2 border-blue-500 my-1" />
         <div>
           <h4 className="font-bold text-blue-800">
-            自变量机器人 | Harrix 具身推理服务
+            自变量机器人 | 极致交付奖 · Harrix 具身推理服务
           </h4>
           <h4 className="font-bold">
             通用 Serving · PI0.5 JAX/Torch · Token 计费
@@ -63,7 +63,7 @@
             </li>
           </ul>
           <h4 className="font-bold text-blue-800">
-            华为 | S 级项目 MetaERP 替换
+            华为 | 英雄强渡大渡河奖 · S 级项目 MetaERP 替换
           </h4>
           <h4 className="font-bold">
             供应链系统 · 财务应付发票 · 美国断供替换
