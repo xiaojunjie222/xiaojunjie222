@@ -58,7 +58,7 @@
 #### 🔜 计划落地
 
 - **双臂机器人操作**
-  训练和推理放在一起做。先接到双臂上，做 pick and place 和叠衣服，再扩到同类桌面操作。这一项还没落地。
+  针对 pick and place、叠衣服等场景单独训练，训练完成后再单独做推理优化。参考 [SwanLab · LeRobot 具身智能入门](https://docs.swanlab.cn/examples/robot/lerobot-guide.html)。这一项还没落地。
 
 #### 📌 Experience Details
 
