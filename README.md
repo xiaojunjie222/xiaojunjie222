@@ -5,7 +5,7 @@
     <strong>I'm currently Focus on Agent Tool-Use, Eval, SFT/Distill and Inference.</strong>
   </p>
   <p>
-    <code>华为 → 科大讯飞（Agent）→ 自变量机器人（Harrix Serving）</code>
+    <code>爱喝鸭屎香柠檬茶</code>
   </p>
 </div>
 
