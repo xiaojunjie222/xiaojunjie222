@@ -47,13 +47,16 @@
 
 ---
 
-#### 📝 推理优化笔记
+#### 📝 具身模型与推理笔记
 
 - **[Harrix 机器人推理优化详解](./notes/robot-inference-optimization.md)**
   从客户端到动作执行，梳理 prefill、KV cache、denoise、算子融合与 CUDA Graph，附 5 张流程图、张量变化表及性能定位方法。
 
 - **[VGA 推理加速](./notes/vga-inference-acceleration.md)**
   VGA 是世界动作模型：先在 latent 里生成未来画面，再从画面特征里读出动作。笔记对照 native 引擎源码，说明每一处已经落地的加速省掉的是哪一段时间。
+
+- **[机器人动作 Tokenizer 与多模态训练详解](./notes/action-tokenizer-and-multimodal-training.md)**
+  从动作坐标与 6D 旋转表示出发，拆解 Encoder、RVQ 码本、Decoder 和两阶段训练，再串起图像、指令、动作 token 的拼接、AR 监督与评测。
 
 #### 🔜 计划落地
 
