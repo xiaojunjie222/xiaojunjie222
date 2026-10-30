@@ -71,3 +71,10 @@
 结合 Harrix 的动作推理路径，梳理客户端与服务调度、专家专用化、视觉结构复用、prefix KV、去噪循环、CUDA Graph、权重峰值、算子融合和 FlashAttention，并说明 RTC 计划衔接与跨请求历史的区别。
 
 文章沿实际推理链路展开，附 5 张流程图、动作块与去噪轮次对照表、源码阅读入口和性能定位方法。
+
+
+## Wall-X 算子优化笔记
+
+[Wall-X 算子优化：融合、访存与数据布局](./notes/wallx-operator-optimization.md)
+
+从模型算子调用到 CUDA 执行机制，整理 SwiGLU、RMSNorm、RoPE、QKV 后处理、固定双专家重排、原生 GQA 和 GEMM 对齐，说明每项优化省掉的开销、适用条件，以及前向、反向和端到端验证方法。

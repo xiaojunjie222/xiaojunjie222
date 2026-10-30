@@ -49,6 +49,9 @@
 
 #### 📝 具身模型与推理笔记
 
+- **[Wall-X 算子优化：融合、访存与数据布局](./notes/wallx-operator-optimization.md)**
+  整理 SwiGLU、RMSNorm、RoPE、QKV 后处理、固定双专家重排、原生 GQA 与 GEMM 对齐，逐项说明优化机制、收益来源、适用条件和验证方法。
+
 - **[Harrix 机器人推理优化详解](./notes/robot-inference-optimization.md)**
   从客户端到动作执行，梳理 prefill、KV cache、denoise、算子融合与 CUDA Graph，附 5 张流程图、张量变化表及性能定位方法。
 
