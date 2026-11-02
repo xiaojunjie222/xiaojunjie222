@@ -80,6 +80,13 @@
 解释接管时 Python、DDS 与 C++ dispatcher 中的旧动作为何可能越过清队列，以及 `_suspend_epoch`、`dispatch_epoch`、`queue_generation_` 三层屏障各自解决的竞态和代价。
 
 
+## Python 上层控制链优化与工程取舍
+
+[Python 上层控制链优化与工程取舍](./notes/robot-python-control-pipeline-optimizations.md)
+
+梳理 C++ dispatcher 之上的观测、异步推理、队列调度和发布协议，区分普通 PCAsync 与 Desktop RTC raw 路径的性能改进、正确性保护和适用边界。
+
+
 ## Wall-X 算子优化笔记
 
 [Wall-X 算子优化：融合、访存与数据布局](./notes/wallx-operator-optimization.md)
