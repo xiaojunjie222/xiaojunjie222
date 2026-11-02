@@ -73,11 +73,11 @@
 文章沿实际推理链路展开，附 5 张流程图、动作块与去噪轮次对照表、源码阅读入口和性能定位方法。
 
 
-## 机器人动作下发改进与工程取舍
+## 机器人接管后“窜一下”：成因、修复与取舍
 
-[机器人动作下发改进与工程取舍](./notes/robot-action-dispatch-improvements.md)
+[机器人接管后“窜一下”：成因、修复与取舍](./notes/robot-action-dispatch-improvements.md)
 
-梳理动作从 Python 客户端进入 C++ dispatcher 后的下发流程，解释接管清理、epoch 与队列代号校验、过期预测处理、逐拍录制和倍率确认，以及这些机制的适用边界。
+解释接管时 Python、DDS 与 C++ dispatcher 中的旧动作为何可能越过清队列，以及 `_suspend_epoch`、`dispatch_epoch`、`queue_generation_` 三层屏障各自解决的竞态和代价。
 
 
 ## Wall-X 算子优化笔记

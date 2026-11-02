@@ -1,48 +1,41 @@
-# 机器人动作下发改进与工程取舍
+# 机器人接管后“窜一下”：成因、修复与取舍
 
-动作块由 Python 提交给 C++ dispatcher，C++ 再按 5 ms 目标周期逐步发布双臂和夹爪命令。这样把高频下发从 Python GIL 和推理线程调度中分离出来，减少动作卡顿。代价是增加一个进程、DDS 通信、实时权限和部署接线；5 ms 只是目标周期，并不等于硬实时保证。
+先澄清：这个问题的直接原因不是 RTC，也不是轨迹平滑。RTC 客户端同样会经过这套接管流程，但真正的问题是控制权切换时，Python、DDS 和 C++ dispatcher 中的旧动作没有在同一时刻失效。只清一个队列，仍可能有旧命令从其他并发路径重新出现。
 
-## 完整下发与接管链路
+## 接管时的完整失效链路
 
 ```mermaid
-flowchart LR
-    P["Python 推理与 RTC 裁剪"] --> E{"dispatch epoch 有效？"}
-    L["传输中晚到的旧 chunk"] --> E
-    E -- "否" --> X["拒绝旧 chunk"]
-    E -- "是" --> Q["安装动作队列<br/>generation + 1"]
-    Q --> T["5 ms 下发线程<br/>复制 step 和 generation"]
-    R["人工接管 / reset"] --> C["清空待发队列<br/>generation + 1"]
-    C --> G{"发布前 generation 仍一致？"}
-    T --> G
-    G -- "否" --> Y["丢弃局部旧 step"]
-    G -- "是" --> D["持锁发布双臂与夹爪命令"]
-    D --> K["控制器"]
-    D --> M["executed_steps<br/>逐拍动作记录"]
-    K --> S["机器人真实状态反馈"]
+flowchart TB
+    A["人工接管 start_remote_control"] --> B["Python 同步切换<br/>remote_control = true<br/>suspend_epoch + 1<br/>清空待处理动作"]
+    B --> C["reset 与 chunk 发布串行化<br/>_dispatch_publish_lock"]
+    C --> D["发送新的 dispatch_epoch"]
+    D --> E["C++ 持锁清空队列<br/>queue_generation + 1<br/>安装新 epoch"]
+    E --> F["返回 reset ACK"]
+
+    P["接管前已开始的推理<br/>接管后才返回"] --> P1{"suspend_epoch 仍一致？"}
+    P1 -- "否" --> P2["丢弃旧推理结果"]
+
+    Q["下发线程已复制旧 step"] --> Q1{"发布前 generation 仍一致？"}
+    Q1 -- "否" --> Q2["丢弃局部旧 step"]
+
+    R["DDS 中晚到的旧 chunk"] --> R1{"dispatch_epoch 有效？"}
+    R1 -- "否" --> R2["拒绝重新入队"]
+
+    F --> S["退出接管后<br/>从真实传感器状态重新开始"]
 ```
 
-图中有三条不同的时间线：`epoch` 管客户端到 C++ 之间的消息有效期，`generation` 管 C++ 进程内的队列版本，状态反馈才表示机器人真实运动。它们不能互相替代。
+图里的三种代际标记含义不同：`_suspend_epoch` 是 Python 推理结果的代际，`dispatch_epoch` 是跨 DDS 的消息有效期，`queue_generation_` 是 C++ 队列版本。三者分别堵住不同竞态，不能合并成一个“RTC 时间轴”。
 
-## “窜一下”是怎样发生的
+## 为什么只清队列还会动
 
-人工接管时，Python 和 C++ 都会清理待发队列。但下发线程可能已在清理前把旧 step 复制到局部变量。清空共享队列删不掉这份副本；如果线程继续发布，机械臂在接管后又收到一次旧目标，就会朝原方向突然动一下。
+第一种竞态发生在 Python。人工接管时，某次基于接管前观测的推理可能还阻塞在网络调用中。即使此时清空 `_action_queue`，旧推理随后返回，仍可能把 stale chunk 填回队列或直接发给 dispatcher。现在接管同步路径会在 `_pc_lock` 保护下提升 `_suspend_epoch`、清理 Python 动作缓存并设置 `remote_control=True`；生产者返回后校验代际，直接发布前也检查接管状态，因此旧结果会被丢弃。
 
-当前代码在清缓存或安装新队列时递增 `queue_generation_`。下发线程取动作时记住 generation，真正发布前再次检查，并在同一把锁内完成整步发布。这样 reset 与发布具有明确顺序。取舍是 reset 可能等待当前发布临界区结束；已经进入 DDS 或控制器的命令也无法由清队列撤回。
+第二种竞态发生在 C++。下发线程可能已经从共享队列复制出一个 step，reset 清空 `steps_` 时删不到这份局部副本。现在清队列和安装新 chunk 都会递增 `queue_generation_`；线程在真正发布前再次校验 generation，并在同一把锁内完成这一拍的双臂、夹爪发布。旧副本因此不会越过 reset。
 
-## 为什么还需要 epoch
+第三种竞态来自 DDS 顺序。reset 与动作 chunk 使用不同的 DataWriter，不能假设 reset 一定最后到达。客户端递增 `dispatch_epoch`，C++ 安装新 epoch 后拒绝缺少 epoch 或 epoch 更旧的 chunk，并用 ACK 告诉客户端屏障已经生效。这样传输中迟到的旧 chunk 也不能重新入队。
 
-generation 只能拦截 C++ 内部已经取出的旧 step，挡不住传输中晚到的旧 chunk。reset 和动作块来自不同 DDS DataWriter，不能依赖到达顺序。因此客户端给动作块附带单调递增的 `dispatch_epoch`：接管时安装新 epoch，C++ 拒绝更旧的动作块，并通过 ACK 确认屏障已经生效。
+## 实际做出的取舍
 
-代价是增加协议版本、握手与超时处理；旧 dispatcher 的兼容 reset 没有同等强度的拒旧保证。ACK 只说明队列或 epoch 已安装，并不表示机械臂已经停止。
+接管时会主动作废一次正在进行的推理，即使它稍后可能返回可用结果；恢复后需要重新推理，换来控制权边界清晰。`_dispatch_publish_lock` 和 C++ mutex 会让 reset 等待正在完成的发布临界区，也可能给单拍发布增加少量等待，换来 reset、换队列和发布之间确定的先后关系。epoch 与 ACK 增加了协议字段、兼容分支和超时处理；旧版 Empty reset 只能清缓存，没有同等强度的拒旧保证。
 
-## RTC 连续性与平滑的取舍
-
-RTC 根据 dispatcher 累计发布的步数判断预测过期程度，整段耗尽就丢弃，不退回最后一个旧目标。raw RTC 不使用空间最近点偷偷跳过动作，否则 Python 不知道时间线前进了多少，下一轮条件会错。
-
-部署配置关闭按传输年龄的二次裁剪和通用 blend，优先保持模型时间位置与实际发布位置一致；首个 raw chunk 仍可从新鲜 live pose 对已有前几拍做过渡。这里选择的是可追踪的时间连续性，而不是额外改写轨迹以追求表面平滑。
-
-## 录制与反馈边界
-
-C++ 发布控制命令时同步补发逐拍 `JointState`，解决迁移后训练录制话题为空的问题。插值倍率区分 target 与 confirmed，只记录 chunk 边界真正采用的值。代价是增加逐拍消息和状态握手。
-
-`executed_steps`、chunk ACK 和首发布延迟都属于命令侧证据：它们说明命令已发布或队列已安装，不代表机械臂已经到位。真机回归仍要结合机器人状态、跟踪误差、人工接管和任务成功率。
+恢复时清掉 `last_arm*_sent` 和 C++ 的历史发布参考，并从最新传感器状态重新建立起点，是为了避免继续使用接管前的位置缓存。这属于控制状态一致性，不是依靠 RTC 裁剪或 blend 掩盖跳变。最后，ACK 只能证明 C++ 已安装屏障；已经进入 DDS 或控制器的命令无法被队列清理撤回，真机是否停止仍要看机器人状态反馈。

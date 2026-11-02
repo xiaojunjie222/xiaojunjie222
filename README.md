@@ -55,8 +55,8 @@
 - **[Harrix 机器人推理优化详解](./notes/robot-inference-optimization.md)**
   从客户端到动作执行，梳理 prefill、KV cache、denoise、算子融合与 CUDA Graph，附 5 张流程图、张量变化表及性能定位方法。
 
-- **[机器人动作下发改进与工程取舍](./notes/robot-action-dispatch-improvements.md)**
-  围绕 C++ 下发、接管时旧动作隔离、RTC 时间对齐、逐拍录制和倍率确认，解释已落地的机制、收益与代价。
+- **[机器人接管后“窜一下”：成因、修复与取舍](./notes/robot-action-dispatch-improvements.md)**
+  解释 Python、DDS 与 C++ 中的旧动作为何会越过清队列，并梳理三层代际校验、reset 屏障及其代价。
 
 - **[VGA 推理加速](./notes/vga-inference-acceleration.md)**
   VGA 是世界动作模型：先在 latent 里生成未来画面，再从画面特征里读出动作。笔记对照 native 引擎源码，说明每一处已经落地的加速省掉的是哪一段时间。
