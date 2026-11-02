@@ -5,7 +5,7 @@
     <strong>I'm currently Focus on Agent Tool-Use, Eval, SFT/Distill and Inference.</strong>
   </p>
   <p>
-    <code>爱喝鸭屎香柠檬茶</code>
+    <code>实践、认识、再实践、再认识……循环往复以至无穷。</code>
   </p>
 </div>
 
