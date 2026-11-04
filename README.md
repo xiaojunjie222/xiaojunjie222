@@ -5,7 +5,7 @@
     <strong>I'm currently Focus on Agent Tool-Use, Eval, SFT/Distill and Inference.</strong>
   </p>
   <p>
-    <code>实践、认识、再实践、再认识……循环往复以至无穷。</code>
+    <code>实践、认识、再实践、再认识……循环往复以至无穷。  蒸馏永远达不到agi</code>
   </p>
 </div>
 
