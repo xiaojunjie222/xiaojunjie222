@@ -93,6 +93,9 @@ flowchart LR
 - **[Python 上层控制链优化与工程取舍](./notes/robot-python-control-pipeline-optimizations.md)**
   梳理异步生产消费、执行进度反馈、compact raw、锁外发布和 RTC 过期结果处理，并区分性能优化与正确性保护。
 
+- **[机器人动作频率适配与姿态转换优化](./notes/robot-control-rate-and-rotation.md)**
+  解释模型关键帧与高频控制下发如何衔接，串起插值补点、四元数与 SLERP、删除姿态转换往返和 C++ raw 下发，区分姿态过渡、CPU 处理与传输开销的改善。
+
 #### 🔜 计划落地
 
 - **双臂机器人操作**
