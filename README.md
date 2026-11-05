@@ -73,6 +73,8 @@ flowchart LR
 
 ##### 推理学习与源码笔记
 
+- **[注意力机制的实现](./examples/student_attention.py)** — 使用 PyTorch 手写普通 Attention。
+
 - **[Wall-X 算子优化：融合、访存与数据布局](./notes/wallx-operator-optimization.md)**
   整理 SwiGLU、RMSNorm、RoPE、QKV 后处理、固定双专家重排、原生 GQA 与 GEMM 对齐，逐项说明优化机制、收益来源、适用条件和验证方法。
 
