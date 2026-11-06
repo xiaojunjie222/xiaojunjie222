@@ -5,7 +5,7 @@
     <strong>I'm currently Focus on Agent Tool-Use, Eval, SFT/Distill and Inference.</strong>
   </p>
   <p>
-    <code>擅长捕捉非对称机会</code>
+    <code>擅长长期捕捉非对称机会</code>
   </p>
 </div>
 
